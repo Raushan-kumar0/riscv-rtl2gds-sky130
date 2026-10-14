@@ -1,0 +1,9 @@
+# precheck.ys - 1-minute sanity check before the long layout run.
+# Run from a checkout of riscv-pipeline-rv32i:   yosys -s <path>/precheck.ys
+# Fails loudly if the design is not synthesizable or infers a latch.
+read_verilog -Irtl rtl/alu.v rtl/branch_cmp.v rtl/control.v rtl/imm_gen.v rtl/regfile.v rtl/riscv_core.v
+hierarchy -check -top riscv_core
+proc
+select -assert-none t:$dlatch t:$adlatch t:$dlatchsr
+synth -top riscv_core -flatten
+stat

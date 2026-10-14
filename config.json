@@ -1,0 +1,11 @@
+{
+  "DESIGN_NAME": "riscv_core",
+  "VERILOG_FILES": "dir::src/*.v",
+  "VERILOG_INCLUDE_DIRS": "dir::src",
+  "CLOCK_PORT": "clk",
+  "CLOCK_PERIOD": 25,
+  "PNR_SDC_FILE": "dir::constraints.sdc",
+  "SIGNOFF_SDC_FILE": "dir::constraints.sdc",
+  "FP_CORE_UTIL": 40,
+  "PL_TARGET_DENSITY_PCT": "expr::($FP_CORE_UTIL + 10.0)"
+}

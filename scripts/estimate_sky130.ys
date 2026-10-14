@@ -1,0 +1,11 @@
+# estimate_sky130.ys - maps the core onto real SkyWater 130nm cells and estimates
+# area and the slowest path (no wires yet, so the real layout will be a bit slower).
+# First download the typical-corner library into scripts/ (see README), then run:
+#   yosys -s scripts/estimate_sky130.ys | grep -E "Chip area|Number of cells|Df ="
+read_verilog -Irtl rtl/alu.v rtl/branch_cmp.v rtl/control.v rtl/imm_gen.v rtl/regfile.v rtl/riscv_core.v
+hierarchy -check -top riscv_core
+synth -top riscv_core -flatten
+dfflibmap -liberty scripts/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty scripts/sky130_fd_sc_hd__tt_025C_1v80.lib -D 8000 -script +strash;ifraig;scorr;dc2;dretime;strash;&get,-n;&dch,-f;&nf,{D};&put;buffer,-N,10;upsize,{D};dnsize,{D};stime,-p
+opt_clean -purge
+stat -liberty scripts/sky130_fd_sc_hd__tt_025C_1v80.lib
